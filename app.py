@@ -56,13 +56,13 @@ class Minifyer:
 
     def minify(self, url: str) -> str:
         url = UrlDAO.create_url(url)
-        x = self.__encoder.encode(str(url.id))
+        encoded_enpoint = self.__encoder.encode(str(url.id))
 
-        return x
+        return encoded_enpoint
 
     def deminify(self, url: str) -> int:
-        x = self.__encoder.decode(url)
-        url = UrlDAO.get_url_by_id(x)
+        source_url_id = self.__encoder.decode(url)
+        url = UrlDAO.get_url_by_id(source_url_id)
 
         return url.url
 
