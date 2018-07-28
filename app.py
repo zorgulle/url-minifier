@@ -14,29 +14,33 @@ class Urls(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String)
 
-def minify(url: str) -> str:
-    import base64
+class Minifyer:
 
-    url = Urls(url=url)
-    session.add(url)
-    session.flush()
+    @staticmethod
+    def minify(url: str) -> str:
+        import base64
 
-    x = base64.standard_b64encode(str(url.id).encode("utf-8"))
+        url = Urls(url=url)
+        session.add(url)
+        session.flush()
 
-    session.commit()
+        x = base64.standard_b64encode(str(url.id).encode("utf-8"))
 
-    return x.decode("utf-8")
+        session.commit()
 
-def deminify(url: str) -> int:
-    import base64
+        return x.decode("utf-8")
 
-    x = base64.standard_b64decode(url.encode("utf-8"))
-    url = session.query(Urls).filter_by(id=int(x)).first()
+    @staticmethod
+    def deminify(url: str) -> int:
+        import base64
 
-    return url.url
+        x = base64.standard_b64decode(url.encode("utf-8"))
+        url = session.query(Urls).filter_by(id=int(x)).first()
+
+        return url.url
 
 if __name__ == "__main__":
-    x = minify("www.google2.com")
+    x = Minifyer.minify("www.google2.com")
     print(x)
-    x = deminify(x)
+    x = Minifyer.deminify(x)
     print(x)
