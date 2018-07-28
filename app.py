@@ -30,7 +30,17 @@ class UrlDAO:
         return session.query(Urls).filter_by(id=int(url_id)).first()
 
 
+
 class Encoder:
+    @staticmethod
+    def encode(to_encode):
+        raise NotImplementedError
+    @staticmethod
+    def decode(to_decode):
+        raise NotImplementedError
+
+
+class Base64EncoderStrategy(Encoder):
     @staticmethod
     def encode(to_encode):
         return base64.standard_b64encode(to_encode.encode("utf-8")).decode("utf-8")
@@ -41,22 +51,25 @@ class Encoder:
 
 
 class Minifyer:
-    @staticmethod
-    def minify(url: str) -> str:
+    def __init__(self, encoder):
+        self.__encoder = encoder
+
+    def minify(self, url: str) -> str:
         url = UrlDAO.create_url(url)
-        x = Encoder.encode(str(url.id))
+        x = self.__encoder.encode(str(url.id))
 
         return x
 
-    @staticmethod
-    def deminify(url: str) -> int:
-        x = Encoder.decode(url)
+    def deminify(self, url: str) -> int:
+        x = self.__encoder.decode(url)
         url = UrlDAO.get_url_by_id(x)
 
         return url.url
 
 if __name__ == "__main__":
-    x = Minifyer.minify("www.google2.com")
+    minifyier = Minifyer(Base64EncoderStrategy())
+
+    x = minifyier.minify("www.google2.com")
     print(x)
-    x = Minifyer.deminify(x)
+    x = minifyier.deminify(x)
     print(x)
