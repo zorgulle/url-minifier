@@ -2,6 +2,7 @@ import argparse
 
 from encoder.encoder import Base64EncoderStrategy
 from minifyer.minifyer import Minifyer
+from settings.settings import get_config
 
 
 def get_arguments():
@@ -12,13 +13,11 @@ def get_arguments():
     parser.add_argument("--config", type=str, default="dev.json", help="Config file")
     args = parser.parse_args()
 
-def get_config(config_type):
-    return {}
 
 if __name__ == "__main__":
     get_arguments()
 
-    config = get_config(args.config)
+    get_config(args.config)
 
     minifyier = Minifyer(Base64EncoderStrategy())
 
