@@ -1,9 +1,8 @@
-from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
 
-engine = create_engine("sqlite:///toto.sql")
-session = sessionmaker(bind=engine)()
+from model.engine import session
+
 Base = declarative_base()
 
 
@@ -11,7 +10,6 @@ class Urls(Base):
     __tablename__ = "Urls"
     id = Column(Integer, primary_key=True, autoincrement=True)
     url = Column(String)
-
 
 class UrlDAO:
     @staticmethod
