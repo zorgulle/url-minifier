@@ -17,4 +17,5 @@ python app.py --url QW2x --action deminify
 ==> www.text.com
 
 #TODO
+ * Add factory to create minifyer with strategy
  * Add mysql and pgsql db support
