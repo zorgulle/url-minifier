@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String
 from sqlalchemy.ext.declarative import declarative_base
 
-from model.engine import session
+from model.engine import Session
 
 Base = declarative_base()
 
@@ -14,12 +14,13 @@ class Urls(Base):
 class UrlDAO:
     @staticmethod
     def create_url(url):
-        url = Urls(url=url)
-        session.add(url)
-        session.flush()
-        session.commit()
+        with Session() as session:
+            url = Urls(url=url)
+            session.add(url)
+            session.flush()
         return url
 
     @staticmethod
     def get_url_by_id(url_id):
-        return session.query(Urls).filter_by(id=int(url_id)).first()
+        with Session() as session:
+            return session.query(Urls).filter_by(id=int(url_id)).first()
